@@ -28,6 +28,15 @@ router.post("/signup", async (req,res) => {
     const epassword = req.body.password
     const password = await bcrypt.hash(epassword,10)
 
+    const check = await prisma.user.findFirst({
+        where:{
+            email : email
+        }
+    })
+    if(check){
+        return res.status(400).json({ message : "User already exist"});
+    }
+
     const user = await prisma.user.create({
         data: {
             email,

@@ -19,5 +19,24 @@ model User {
   name     String
   number   String     @unique
   password String
+  order    Orders[]  
 }
 
+model Products {
+  id            Int        @id @default(autoincrement())
+  name          String     
+  description   String     
+  price         Int
+  stock         Int
+  product_user Orders[]
+  Category      String?
+}
+
+
+model Orders {
+  id            Int      @id @default(autoincrement())
+  user_id       Int   
+  product_id    Int
+  user          User     @relation(fields: [user_id], references: [id])
+  product       Products @relation(fields: [product_id],references: [id])
+}
