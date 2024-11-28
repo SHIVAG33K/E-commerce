@@ -1,6 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from "axios";
 
 const OrderPage = () => {
+  const [data, setData] = useState([])
+
+  const fetchData = async() => {
+    const data = await axios.get("http://localhost:3000/api/orders/",{
+      withCredentials: true
+    });
+    setData(data);
+  };
+
+  useEffect(() => {
+    fetchData();
+  },[]) 
+  console.log(data);
   return (
     <div className="px-6 py-8 sm:px-24 bg-gray-100 min-h-screen">
       <div className="space-y-8 max-w-4xl mx-auto">
@@ -12,7 +26,19 @@ const OrderPage = () => {
         </div>
 
         <div className="space-y-8">
-          <OrderItem 
+        {data.length === 0 ? (
+                <p>No products available.</p>
+              ) : (
+
+                <OrderItem 
+                  orderNumber="AT48441546" 
+                  datePlaced="Dec 28, 2024" 
+                  totalAmount="$40.00"x
+                  items={data.data}
+                />  )}
+
+
+          {/* <OrderItem 
             orderNumber="WU88191111" 
             datePlaced="Jul 6, 2021" 
             totalAmount="$160.00"
@@ -32,22 +58,7 @@ const OrderPage = () => {
                 deliveredDate: "July 12, 2021"
               }
             ]}
-          />
-
-          <OrderItem 
-            orderNumber="AT48441546" 
-            datePlaced="Dec 22, 2020" 
-            totalAmount="$40.00"
-            items={[
-              {
-                name: "Double Stack Clothing Bag",
-                price: "$40.00",
-                description: "Save space and protect your favorite clothes in this double-layer garment bag.",
-                imageUrl: "https://tailwindui.com/plus/img/ecommerce-images/order-history-page-03-product-03.jpg",
-                deliveredDate: "January 5, 2021"
-              }
-            ]}
-          />
+          /> */}
         </div>
       </div>
     </div>
@@ -78,25 +89,31 @@ const OrderItem = ({ orderNumber, datePlaced, totalAmount, items }) => (
     </dl>
 
     <div className="space-y-6">
-      {items.map((item, index) => (
+    {items.length === 0 ? (
+    <p>No products available.</p>
+       ) : (
+      items.map((item, index) => (
+        item.product ? (
         <div key={index} className="flex items-start space-x-4">
           <img
             className="w-24 h-24 object-cover rounded-md shadow-md"
-            src={item.imageUrl}
+            src={item.product.image}
             alt={item.name}
           />
           <div className="flex-1">
-            <h5 className="text-lg font-semibold text-gray-800">{item.name}</h5>
-            <p className="text-sm text-gray-500">{item.price}</p>
-            <p className="text-sm text-gray-500 mt-1">{item.description}</p>
-            <p className="text-sm text-gray-400 mt-2">Delivered on {item.deliveredDate}</p>
+            <h5 className="text-lg font-semibold text-gray-800">{item.product.name}</h5>
+            {/* <p className="text-sm text-gray-500">{item.product.price}</p> */}
+            <p className="text-sm text-gray-500 mt-1">{item.product.description}</p>
+            <p className="text-sm text-gray-400 mt-2">Delivered on {item.product.deliveredDate}</p>
             <div className="flex space-x-4 mt-4">
               <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">View product</a>
               <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">Buy again</a>
             </div>
           </div>
         </div>
-      ))}
+            ) :  <p>No products available.</p> 
+          ))
+        )}
     </div>
 
     <div className="text-right">

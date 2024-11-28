@@ -7,9 +7,10 @@ const router = express.Router();
 const prisma = new PrismaClient();
 
 
-router.get("/products",async(req,res)=>{
+router.get("/",async(req,res)=>{
 
-    // const products = await prisma.products.({})
+    const products = await prisma.products.findMany();
+    res.send(products);
 })
 
 router.get("/:id", async(req,res) => {
@@ -19,7 +20,7 @@ router.get("/:id", async(req,res) => {
         where:{
             id : Number(id)
         }
-    })
+    });
     
     res.send(item);
 });

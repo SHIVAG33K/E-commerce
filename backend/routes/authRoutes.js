@@ -44,9 +44,11 @@ router.post("/signup", async (req,res) => {
             password
         },
     });
-    // req.session.user = { id : user.id, name : user.name}
-  
+
+      
     const token = jwt.sign({id : user.id},process.env.JWT_SECRET)
+
+  
     res.json({token : token})
     
 });
@@ -78,14 +80,19 @@ router.post("/signin", async (req,res) => {
     if(!match){
         return res.status(400).json({ message : "wrong password"})
     }
-    // req.session.user = { id : user.id, name : user.name}
+
     const token = jwt.sign({id : user.id},process.env.JWT_SECRET);
+
+
+
+
     res.json({
         token : token
     });
 
-    
 });
+
+
 
 export default router;
 

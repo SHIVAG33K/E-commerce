@@ -14,21 +14,21 @@ const products =  [
       name: 'Zara Stretch Shirt',
       category: 'Shirts',
       price: '$550.00',
-      imageUrl: 'https://static.zara.net/photos///2022/V/0/2/p/4927/302/800/2/w/850/4927302800_6_1_1.jpg?ts=1643804064213',
+      imageUrl: 'https://tailwindui.com/plus/img/ecommerce-images/product-page-01-related-product-02.jpg',
     },
     {
       id: 3,
       name: 'Zara Checked Flannel Shirt',
       category: 'Shirts',
       price: '$450.00',
-      imageUrl: 'https://static.zara.net/photos///2022/I/0/2/p/4927/303/250/2/w/850/4927303250_6_1_1.jpg?ts=1664354204611',
+      imageUrl: 'https://tailwindui.com/plus/img/ecommerce-images/product-page-01-related-product-03.jpg',
     },
     {
       id: 4,
       name: 'Men Self-Design Regular Fit Shirt',
       category: 'Shirts',
       price: '$540.00',
-      imageUrl: 'https://assets.myntassets.com/dpr_1.5,q_60,w_400,c_limit,fl_progressive/assets/images/13714552/2022/7/11/5fa26965-d9c0-4ed8-8f3b-f520c60c06d01657538390816-Roadster-Men-Shirts-4391657538390472-1.jpg',
+      imageUrl: 'https://tailwindui.com/plus/img/ecommerce-images/product-page-01-related-product-04.jpg',
     },
   ];
   

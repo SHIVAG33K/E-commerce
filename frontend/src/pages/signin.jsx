@@ -8,6 +8,8 @@ import {
 import { useState } from "react";
 import axios from "axios"
 import { useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie';
+
 
 
   export function SigninForm() {
@@ -18,11 +20,22 @@ import { useNavigate } from "react-router-dom";
     const navigate = useNavigate()
 
     const updateData = async() => {
+      try{
         const response =  await axios.post("http://localhost:3000/api/auth/signin" ,{
-            email,
-            name,
-            password
-        })
+          email,
+          name,
+          password
+      },{
+        withCredentials: true
+      });
+
+      Cookies.set("token", response.data.token);
+      console.log("done");
+      navigate('/')
+
+      }catch(e){
+        return "invalid credentials"
+      }
     };
 
 
@@ -102,13 +115,14 @@ import { useNavigate } from "react-router-dom";
             }
             containerProps={{ className: "-ml-2.5" }}
           />
-          <Button onClick={() => updateData()} className="mt-6" fullWidth>
+          <Button onClick={() => {updateData()
+          }} className="mt-6" fullWidth>
             sign In
           </Button>
           <Typography color="gray" className="mt-4 text-center font-normal">
             Don't have an account?{" "}
             <span 
-              onClick={()=> navigate('/signup')} 
+              onClick={()=>   navigate('/signup')} 
               className="font-medium text-gray-900 cursor-pointer"
             >
               Sign Up
@@ -116,11 +130,8 @@ import { useNavigate } from "react-router-dom";
           </Typography>
         </form>
       </Card>
-      </div>
-      
+      </div> 
   </div>
-
-
     );
   }
   

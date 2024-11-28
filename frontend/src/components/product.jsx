@@ -1,5 +1,9 @@
+import { useNavigate } from "react-router-dom"
 
   export default function DisplayProducts( { products = [] }) {
+
+    const navigate = useNavigate();
+
     return (
       <div className="bg-white">
         {/* <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8"> */}
@@ -10,11 +14,11 @@
               <p>No products available.</p>
             ) : (
             products.map((product) => (
-              <div key={product.id} className="group relative">
+              <div key={product.id} className="group relative" onClick={()=>{navigate(`/products/${product.id}`)}}>
                 <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
                   <img
-                    alt={product.imageAlt}
-                    src={product.imageSrc}
+                    alt={product.image}
+                    src={product.image}
                     className="h-full w-full object-cover object-center lg:h-full lg:w-full"
                   />
                 </div>

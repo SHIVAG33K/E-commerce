@@ -126,7 +126,9 @@ import { useNavigate } from "react-router-dom";
             }
             containerProps={{ className: "-ml-2.5" }}
           />
-          <Button onClick={() => updateData()} className="mt-6" fullWidth>
+          <Button onClick={() => {
+            updateData();
+            navigate("/") }} className="mt-6" fullWidth>
             sign up
           </Button>
           <Typography color="gray" className="mt-4 text-center font-normal">

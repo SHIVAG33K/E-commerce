@@ -26,9 +26,12 @@ model User {
 model Products {
   id            Int        @id @default(autoincrement())
   name          String     
-  description   String     
+  description   String
+  details       String     
   price         Int
   stock         Int
+  image         String
+  color         String
   product_user Orders[]
   cart         Cart[]
   Category      String?

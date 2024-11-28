@@ -5,17 +5,20 @@ const router = express.Router();
 const prisma = new PrismaClient();
 
 router.get("/" ,async(req,res)=> {
-    const {id , name} = req.session.user
+    const id = req.user.id
     const cart = await prisma.cart.findMany({
         where:{
             user_id:id
-        }
+        },
+        include: {
+            product: true,
+          },
     })
     res.send(cart);
     });
 
 router.post("/", async(req,res)=>{
-    const {id , name} = req.session.user
+    const id = req.user.id
     
     const {product_id,quantity} = req.body
     try{
@@ -27,7 +30,7 @@ router.post("/", async(req,res)=>{
             }
         })
     
-        res.send( cart)
+        res.send(cart)
     }catch(e){
         res.send(e)
     }
@@ -35,7 +38,7 @@ router.post("/", async(req,res)=>{
 });
 
 router.delete("/:itemId", async(req,res)=>{
-    const {id , name} = req.session.user
+    const id = req.user.id
     const item_id = req.params.itemId
     try{
         const card = await prisma.cart.delete({

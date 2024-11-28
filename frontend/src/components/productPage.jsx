@@ -1,21 +1,18 @@
-'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { StarIcon } from '@heroicons/react/20/solid'
 import { Radio, RadioGroup } from '@headlessui/react'
+import { useParams } from 'react-router-dom'
+import axios from "axios";
 
 const product = {
-  name: 'Basic Tee 6-Pack',
-  price: '$192',
-  href: '#',
+
   breadcrumbs: [
     { id: 1, name: 'Men', href: '#' },
     { id: 2, name: 'Clothing', href: '#' },
   ],
-  image: {
-    src: 'https://tailwindui.com/plus/img/ecommerce-images/product-page-02-featured-product-shot.jpg',
-    alt: 'Model wearing plain white basic tee.',
-  },
+
   colors: [
     { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
     { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
@@ -31,18 +28,17 @@ const product = {
     { name: '2XL', inStock: true },
     { name: '3XL', inStock: true },
   ],
-  description:
-    'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
-  highlights: [
+    highlights: [
     'Hand cut and sewn locally',
     'Dyed with our proprietary colors',
     'Pre-washed & pre-shrunk',
     'Ultra-soft 100% cotton',
   ],
-  details:
-    'The 6-Pack includes two black, two white, and two heather gray Basic Tees. Sign up for our subscription service and be the first to get new, exciting colors, like our upcoming "Charcoal Gray" limited release.',
-}
-const reviews = { href: '#', average: 4, totalCount: 117 }
+  }
+
+
+
+// const reviews = { href: '#', average: 4, totalCount: 117 }
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -51,10 +47,30 @@ function classNames(...classes) {
 export default function Example() {
   const [selectedColor, setSelectedColor] = useState(product.colors[0])
   const [selectedSize, setSelectedSize] = useState(product.sizes[2])
+  const [items , setItems] = useState([])
 
+  
+  
+  const {id} = useParams();
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/api/products/${id}`,{
+          withCredentials: true
+        });
+        setItems(response.data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchItems();
+  }, []);
+  const navigate = useNavigate();
   return (
     <div className="bg-white">
-      <div className="pt-6">
+      <div className="pt-12">
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb">
           <ol role="list" className="mx-auto flex pl-0 max-w-2xl pr-0 items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -78,8 +94,8 @@ export default function Example() {
               </li>
             ))}
             <li className="text-sm">
-              <a href={product.href} aria-current="page" className="font-medium text-gray-500 hover:text-gray-600">
-                {product.name}
+              <a href="#" aria-current="page" className="font-medium text-gray-500 hover:text-gray-600">
+                {items.name}
               </a>
             </li>
           </ol>
@@ -91,40 +107,18 @@ export default function Example() {
             {/* Left Column: Product Image */}
             <div className="flex justify-center items-center">
               <img
-                alt={product.image.alt}
-                src={product.image.src}
+                src={items.image}
                 className="w-full max-w-md object-cover object-center rounded-lg"
- // Shrink the image size
               />
+
             </div>
 
             {/* Right Column: Product Details */}
             <div className="lg:pl-8 mt-6 lg:mt-0">
-              <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{product.name}</h1>
-              <p className="text-3xl tracking-tight text-gray-900 mt-4">{product.price}</p>
+              <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{items.name}</h1>
+              <p className="text-3xl tracking-tight text-gray-900 mt-4">${items.price}</p>
 
-              {/* Reviews */}
-              <div className="mt-6">
-                <h3 className="sr-only">Reviews</h3>
-                <div className="flex items-center">
-                  <div className="flex items-center">
-                    {[0, 1, 2, 3, 4].map((rating) => (
-                      <StarIcon
-                        key={rating}
-                        aria-hidden="true"
-                        className={classNames(
-                          reviews.average > rating ? 'text-gray-900' : 'text-gray-200',
-                          'h-5 w-5 shrink-0',
-                        )}
-                      />
-                    ))}
-                  </div>
-                  <p className="sr-only">{reviews.average} out of 5 stars</p>
-                  <a href={reviews.href} className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500">
-                    {reviews.totalCount} reviews
-                  </a>
-                </div>
-              </div>
+
 
               {/* Color Selector */}
               <div className="mt-6">
@@ -212,8 +206,24 @@ export default function Example() {
               <button
                 type="submit"
                 className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-              >
-                Add to bag
+                onClick={async() => {
+                  const query = await axios.post("http://localhost:3000/api/cart/",{
+                    product_id: Number(id) , quantity : 1
+                  },{
+                    withCredentials: true
+                  })
+                  navigate("/cart")
+                  console.log("done")
+                }}>
+                Add to Cart
+              </button>
+              <button
+                type="submit"
+                className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                onClick={() => {
+                  navigate("/")
+                }}>
+                buy
               </button>
             </div>
           </div>
@@ -221,7 +231,7 @@ export default function Example() {
           {/* Description */}
           <div className="mt-10">
             <h3 className="text-sm font-medium text-gray-900">Description</h3>
-            <p className="mt-4 text-base text-gray-900">{product.description}</p>
+            <p className="mt-4 text-base text-gray-900">{items.description}</p>
           </div>
 
           {/* Highlights */}
@@ -239,7 +249,7 @@ export default function Example() {
           {/* Details */}
           <div className="mt-10">
             <h2 className="text-sm font-medium text-gray-900">Details</h2>
-            <p className="mt-4 text-sm text-gray-600">{product.details}</p>
+            <p className="mt-4 text-sm text-gray-600">{items.details}</p>
           </div>
         </div>
       </div>

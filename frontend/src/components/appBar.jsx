@@ -21,10 +21,11 @@ function AppBar() {
       </div>
 
       {/* Icons */}
-      <div className="flex items-center space-x-6"  onClick={ () => navigate("/orders")}>
+      <div className="flex items-center space-x-6">
         {/* Orders Icon */}
-        <FaClipboardList className="text-xl cursor-pointer" />
-
+        <div onClick={ () => navigate("/orders")}>
+          <FaClipboardList className="text-xl cursor-pointer" />
+        </div>
         {/* Profile Icon with Dropdown */}
         <div className="relative group">
           <FaUser className="text-xl cursor-pointer" />
