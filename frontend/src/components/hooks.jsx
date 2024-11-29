@@ -1,7 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';  
+import {addItems, removeItems, clearCart } from '../features/cartSlice.js';
+import { useEffect } from 'react';
+import { products } from '../features/productsSlice';
 
-export function useFetchData(url) {
+export function useFetchData(url,fn) {
+
+  const dispatch = useDispatch();
+
   const fetchData = async () => {
     const { data } = await axios.get(url,{
       withCredentials : true
@@ -9,11 +16,17 @@ export function useFetchData(url) {
     return data;
   };
 
-  const { isLoading, isError, data, error } = useQuery({
-    queryKey: ['data', url],
-    queryFn: fetchData,
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: [url], 
+    queryFn: fetchData, 
   });
+  useEffect(()=>{
+    if(data){
+      dispatch(fn(data));
+    }
+  },[data]);
 
+  
   return { isLoading, isError, data, error };
 }
 

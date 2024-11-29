@@ -2,29 +2,25 @@ import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import { useFetchData } from './hooks';
+import { useDispatch, useSelector } from 'react-redux';  
+import {addItems, removeItems, clearCart } from '../features/cartSlice.js';
 
 const CartPage = () => {
-  // const [cartItems, setCartItems] = useState([]);
-  const navigate = useNavigate();
 
-  // const fetchData = async () => {
-  //   try {
-  //     const response = await axios.get("http://localhost:3000/api/cart", {
-  //       withCredentials: true,
-  //     });
-  //     setCartItems(response.data);
-  //   } catch (error) {
-  //     console.error('Error fetching cart items:', error);
-  //   }
-  // };
-  const url = "http://localhost:3000/api/cart"
-  const { isLoading, isError, data, error } = useFetchData(url);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { items, totalAmount } = useSelector(state => state.cart);
+  
+  const url = "http://localhost:3000/api/cart";
+ 
+
+  
+  const { isLoading, isError, data, error } = useFetchData(url,addItems)
+
   const cartItems = data || [];
-  // useEffect(() => {
-  //   if (data) {
-  //     setCartItems(data);
-  //   }
-  // }, [data]);
+  
+
 
   const removeProduct = async (id) => {
     const data = await axios.delete(`http://localhost:3000/api/cart/${id}`,{

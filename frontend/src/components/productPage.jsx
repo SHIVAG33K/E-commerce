@@ -5,6 +5,9 @@ import { StarIcon } from '@heroicons/react/20/solid'
 import { Radio, RadioGroup } from '@headlessui/react'
 import { useParams } from 'react-router-dom'
 import axios from "axios";
+import { useFetchData } from './hooks';
+import { useDispatch, useSelector } from 'react-redux';  
+import { products } from '../features/productsSlice';
 
 const product = {
 
@@ -47,26 +50,33 @@ function classNames(...classes) {
 export default function Example() {
   const [selectedColor, setSelectedColor] = useState(product.colors[0])
   const [selectedSize, setSelectedSize] = useState(product.sizes[2])
-  const [items , setItems] = useState([])
+  // const [items , setItems] = useState([])
+  
+  
+  
+  const {products} = useSelector(state => state.products)
 
-  
-  
   const {id} = useParams();
+  const url = `http://localhost:3000/api/products/${id}`;
 
-  useEffect(() => {
-    const fetchItems = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3000/api/products/${id}`,{
-          withCredentials: true
-        });
-        setItems(response.data);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchItems = async () => {
+  //     try {
+  //       const response = await axios.get(`http://localhost:3000/api/products/${id}`,{
+  //         withCredentials: true
+  //       });
+  //       setItems(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching products:", error);
+  //     }
+  //   };
 
-    fetchItems();
-  }, []);
+  //   fetchItems();
+  // }, []);
+  const { isLoading, isError, data, error } = useFetchData(url,products)
+
+  const items = data || [];
+
   const navigate = useNavigate();
   return (
     <div className="bg-white">

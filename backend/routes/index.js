@@ -19,6 +19,8 @@ router.use(session({
     }
   }));
 
+  
+
 router.use("/auth",authRouter);
 router.use("/products",authMiddleware, productRouter);
 router.use("/cart",authMiddleware,cartRouter);
