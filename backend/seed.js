@@ -316,9 +316,7 @@ const products = [
 
 async function emptyProducts() {
 
-await prisma.products.createMany({
-  data: products,
-});
+await prisma.orders.deleteMany({});
   console.log("All products added.");
 }
 

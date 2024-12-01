@@ -5,9 +5,9 @@ import { StarIcon } from '@heroicons/react/20/solid'
 import { Radio, RadioGroup } from '@headlessui/react'
 import { useParams } from 'react-router-dom'
 import axios from "axios";
-import { useFetchData } from './hooks';
 import { useDispatch, useSelector } from 'react-redux';  
-import { products } from '../features/productsSlice';
+import { productSlice } from '../features/productsSlice';
+import { useFetchData } from './hooks';
 
 const product = {
 
@@ -50,32 +50,37 @@ function classNames(...classes) {
 export default function Example() {
   const [selectedColor, setSelectedColor] = useState(product.colors[0])
   const [selectedSize, setSelectedSize] = useState(product.sizes[2])
-  // const [items , setItems] = useState([])
+  const [items , setItems] = useState([])
   
-  
-  
-  const {products} = useSelector(state => state.products)
+ 
 
   const {id} = useParams();
   const url = `http://localhost:3000/api/products/${id}`;
 
-  // useEffect(() => {
-  //   const fetchItems = async () => {
-  //     try {
-  //       const response = await axios.get(`http://localhost:3000/api/products/${id}`,{
-  //         withCredentials: true
-  //       });
-  //       setItems(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching products:", error);
-  //     }
-  //   };
+  const products = useSelector(state => state.products.products);
 
-  //   fetchItems();
-  // }, []);
-  const { isLoading, isError, data, error } = useFetchData(url,products)
+  useEffect(()=>{
+    if(products.length > 0){
+      setItems(products.find(item => item.id == id));
+    }else{
+      const fetchItems = async () => {
+        try {
+          const response = await axios.get(url,{
+            withCredentials: true
+          });
+         setItems(response.data);
+        } catch (error) {
+          console.error("Error fetching products:", error);
+        }
+      };
+  
+      fetchItems();
+    }
+  },[products])
 
-  const items = data || [];
+  
+  
+
 
   const navigate = useNavigate();
   return (
@@ -103,9 +108,10 @@ export default function Example() {
                 </div>
               </li>
             ))}
+
             <li className="text-sm">
               <a href="#" aria-current="page" className="font-medium text-gray-500 hover:text-gray-600">
-                {items.name}
+                {items?.name}
               </a>
             </li>
           </ol>
@@ -117,7 +123,7 @@ export default function Example() {
             {/* Left Column: Product Image */}
             <div className="flex justify-center items-center">
               <img
-                src={items.image}
+                src={items?.image}
                 className="w-full max-w-md object-cover object-center rounded-lg"
               />
 
@@ -125,8 +131,8 @@ export default function Example() {
 
             {/* Right Column: Product Details */}
             <div className="lg:pl-8 mt-6 lg:mt-0">
-              <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{items.name}</h1>
-              <p className="text-3xl tracking-tight text-gray-900 mt-4">${items.price}</p>
+              <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{items?.name}</h1>
+              <p className="text-3xl tracking-tight text-gray-900 mt-4">${items?.price}</p>
 
 
 
@@ -241,7 +247,7 @@ export default function Example() {
           {/* Description */}
           <div className="mt-10">
             <h3 className="text-sm font-medium text-gray-900">Description</h3>
-            <p className="mt-4 text-base text-gray-900">{items.description}</p>
+            <p className="mt-4 text-base text-gray-900">{items?.description}</p>
           </div>
 
           {/* Highlights */}
@@ -259,7 +265,7 @@ export default function Example() {
           {/* Details */}
           <div className="mt-10">
             <h2 className="text-sm font-medium text-gray-900">Details</h2>
-            <p className="mt-4 text-sm text-gray-600">{items.details}</p>
+            <p className="mt-4 text-sm text-gray-600">{items?.details}</p>
           </div>
         </div>
       </div>

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';  
 import {addItems, removeItems, clearCart } from '../features/cartSlice.js';
 import { useEffect } from 'react';
-import { products } from '../features/productsSlice';
+import { setProducts } from '../features/productsSlice';
 
 export function useFetchData(url,fn) {
 

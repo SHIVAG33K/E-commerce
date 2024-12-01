@@ -11,15 +11,25 @@ export const cartSlice = createSlice({
   reducers: {
     addItems: (state,action) => {
       const newItem = action.payload;
-      state.items.push(newItem);
+      if(newItem && newItem.length > 0){
+        newItem.map(item => {
+          state.items.push(item);  
+          // state.totalAmount += item.price; 
+        });
+      }
+      
+      
       // state.totalAmount += newItem.price;
     },
     removeItems: (state,action) => {
         const product = action.payload;
-        const exist = state.items.find(item => item.id == product.id);
+      
+        const exist = state.items.find(item => item.id == product);
+      
         if (exist){
-            state.items.filter(item => item.id != product.id );
-            state.totalAmount -= exist.price
+          state.items = state.items.filter(item => item.id != product );
+           
+            // state.totalAmount -= exist.price
         }
     },
     clearCart: state => {

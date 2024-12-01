@@ -2,25 +2,25 @@ import { useState, useEffect } from "react";
 import AppBar from "../components/appBar";
 import BusinessInfo from "../components/Info";
 import Example from "../components/sidebar";
-import axios from "axios";
+import { useFetchData } from "../components/hooks";
+import { setProducts} from "../features/productsSlice";
+import { useSelector } from "react-redux";
+
 
 export default function Products() {
-  const [items, setItems] = useState([]);
 
-  useEffect(() => {
-    const fetchItems = async () => {
-      try {
-        const response = await axios.get("http://localhost:3000/api/products/",{
-          withCredentials: true
-        });
-        setItems(response.data);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
+  const url = "http://localhost:3000/api/products/";
 
-    fetchItems();
-  }, []);
+    const { isLoading, isError, data, error } = useFetchData(url,setProducts);
+    const items = data || [];
+
+    if (isLoading) {
+      return <div>Loading ...</div>;
+    }
+
+    if (isError) {
+      return <div>Error: {error}</div>;
+    }
 
   return (
     <div>

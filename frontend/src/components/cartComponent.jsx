@@ -13,32 +13,45 @@ const CartPage = () => {
   const { items, totalAmount } = useSelector(state => state.cart);
   
   const url = "http://localhost:3000/api/cart";
- 
 
+
+  const { isLoading, isError, data,error } = useFetchData(url,addItems)
   
-  const { isLoading, isError, data, error } = useFetchData(url,addItems)
-
-  const cartItems = data || [];
   
-
-
+  const cartItems = items || [];
+  
   const removeProduct = async (id) => {
-    const data = await axios.delete(`http://localhost:3000/api/cart/${id}`,{
-      withCredentials: true,
-    })
-  }
+
+      
+      try {
+       const data = await axios.delete(`http://localhost:3000/api/cart/${id}`, { withCredentials: true });
+       if(data){
+        dispatch(removeItems(id));
+       }
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    
+
+  
+
+ 
+  
   const fixed = {
     size: 'Large',
     inStock: true,
     estimatedShipping: 'Ships in 3–4 weeks',
   };
 
-  const removeItem = (id) => {
-    setCartItems(cartItems.filter(item => item.id !== id));
-  };
+  // const removeItem = (id) => {
+  //   setCartItems(cartItems.filter(item => item.id !== id));
+  // };
 
   const allProducts = []
-  cartItems.map(item => allProducts.push(item.product.id))
+  cartItems.map(item => allProducts.push(item.product.id));
+
+
 
 
   const sendOrder = async()=>{
@@ -104,8 +117,7 @@ const CartPage = () => {
                         <button
                           type="button"
                           onClick={() => {
-                            removeItem(item.id)
-                            removeProduct(item.id)
+                            removeProduct(item.id);
                           }
                           }
                           className="ml-4 text-sm text-red-600 hover:text-red-800"
