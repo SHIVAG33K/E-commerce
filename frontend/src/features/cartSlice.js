@@ -11,6 +11,7 @@ export const cartSlice = createSlice({
   reducers: {
     addItems: (state,action) => {
       const newItem = action.payload;
+      
       if(newItem && newItem.length > 0){
         newItem.map(item => {
           state.items.push(item);  

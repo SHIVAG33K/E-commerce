@@ -92,6 +92,35 @@ router.post("/signin", async (req,res) => {
 
 });
 
+router.post("/check", async (req,res) => {
+
+    
+  const token = req.cookies['token'];
+
+  if (!token)
+    return res.status(401).json({
+      message: "Unauthorised user!",
+    });
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    if(decoded){
+        res.json({
+            msg : "authorised user!"
+        });
+    }
+
+
+  } catch (error) {
+    res.status(401).json({
+      success: false,
+      message: "Unauthorised user!",
+    });
+  }
+});
+
+
+
 
 
 export default router;

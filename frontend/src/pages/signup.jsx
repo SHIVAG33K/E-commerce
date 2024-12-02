@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';  
 import { user } from "../features/userSlice";
-import Cookies from 'js-cookie';
+import cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 
 export function SignupForm() {
@@ -26,7 +26,7 @@ export function SignupForm() {
         withCredentials: true
       });
       if( response.data.token){
-        Cookies.set("token", response.data.token);
+        cookies.set("token", response.data.token);
         const decoded = jwtDecode(response.data.token);
         dispatch(user(decoded));
         navigate('/');

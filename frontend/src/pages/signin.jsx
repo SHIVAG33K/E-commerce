@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Cookies from 'js-cookie';
+import cookies from 'js-cookie';
 import { useQuery } from '@tanstack/react-query';
+import { useDispatch } from 'react-redux';
+import {user} from "../features/userSlice";
+import { jwtDecode } from 'jwt-decode';
 
 export function SigninForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const updateData = async (e) => {
     e.preventDefault();
@@ -19,8 +23,12 @@ export function SigninForm() {
         withCredentials: true
       });
 
-      Cookies.set("token", response.data.token);
-      navigate('/');
+      if( response.data.token){
+        cookies.set("token", response.data.token);
+        const decoded = jwtDecode(response.data.token);
+        dispatch(user(decoded));
+        navigate('/');
+      }
     } catch (e) {
       console.error("invalid credentials");
     }
@@ -46,7 +54,7 @@ return (
             <p className="text-gray-600">Enter your email below to login to your account</p>
           </div>
           <div className="flex flex-col justify-center flex-grow">
-            <form onSubmit={updateData} className="space-y-4">
+            <form  className="space-y-4">
               <div className="space-y-2">
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
                 <input
@@ -84,7 +92,7 @@ return (
               <button
                 type="submit"
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
+                onClick={updateData}>
                 Sign In
               </button>
             </form>
