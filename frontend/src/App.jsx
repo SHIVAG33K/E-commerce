@@ -17,16 +17,16 @@ function App() {
         <Routes>
           <Route path="/signup" element={<SignupForm />}/>
           <Route path="/signin" element={<SigninForm />}/>
-          {/* <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+          <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path="/products" element={<ProtectedRoute><Products /></ProtectedRoute>} /> 
           <Route path="/products/:id" element={<ProtectedRoute><Product /></ProtectedRoute>} /> 
           <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} /> 
-          <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />  */}
-          <Route path="/" element={<Home />} />
+          <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} /> 
+          {/* <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />}/> 
           <Route path="/products/:id" element={<Product /> }/> 
           <Route path="/cart" element={<Cart />} /> 
-          <Route path="/orders" element={<Orders />} /> 
+          <Route path="/orders" element={<Orders />} />  */}
           
         </Routes>
       </BrowserRouter>
