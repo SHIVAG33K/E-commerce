@@ -13,9 +13,10 @@ const CartPage = () => {
   const { items, totalAmount } = useSelector(state => state.cart);
   
   const url = "http://localhost:3000/api/cart";
+  
+  const shouldFetch = items.length === 0;
 
-
-  const { isLoading, isError, data,error } = useFetchData(url,addItems)
+  const { isLoading, isError, data,error } = useFetchData(url,addItems,shouldFetch);
   
   
   const cartItems = items || [];

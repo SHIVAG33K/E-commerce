@@ -2,9 +2,9 @@ import AppBar from "../components/appBar";
 import BusinessInfo from "../components/Info";
 import OrderPage from "../components/ordersPage";
 
-export default function Orders(){
 
-  return(
+export default function Orders(){
+ return(
 
   <div>
     <AppBar />

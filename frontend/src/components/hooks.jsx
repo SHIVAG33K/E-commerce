@@ -4,8 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import {addItems, removeItems, clearCart } from '../features/cartSlice.js';
 import { useEffect } from 'react';
 import { setProducts } from '../features/productsSlice';
+import { useNavigate } from 'react-router-dom';
 
-export function useFetchData(url,fn) {
+export function useFetchData(url,fn, shouldFetch) {
 
   const dispatch = useDispatch();
 
@@ -19,17 +20,17 @@ export function useFetchData(url,fn) {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: [url], 
     queryFn: fetchData, 
+    enabled: shouldFetch,
   });
-  useEffect(()=>{
-    if(data){
+  useEffect(() => {
+    if (shouldFetch && data) {
       dispatch(fn(data));
     }
-  },[data]);
+  }, [data, dispatch, fn, shouldFetch]);
 
   
   return { isLoading, isError, data, error };
 }
-
 
 
 

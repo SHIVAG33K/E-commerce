@@ -1,137 +1,106 @@
-import {
-    Card,
-    Input,
-    Checkbox,
-    Button,
-    Typography,
-  } from "@material-tailwind/react";
-import { useState } from "react";
-import axios from "axios"
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import Cookies from 'js-cookie';
+import { useQuery } from '@tanstack/react-query';
 
+export function SigninForm() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-
-  export function SigninForm() {
-
-    const [name,setName] = useState("");
-    const [email,setEmail] = useState("");
-    const [password,setPassword] = useState("")
-    const navigate = useNavigate()
-
-    const updateData = async() => {
-      try{
-        const response =  await axios.post("http://localhost:3000/api/auth/signin" ,{
-          email,
-          name,
-          password
-      },{
+  const updateData = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("http://localhost:3000/api/auth/signin", {
+        email,
+        password
+      }, {
         withCredentials: true
       });
 
       Cookies.set("token", response.data.token);
-      console.log("done");
-      navigate('/')
-
-      }catch(e){
-        return "invalid credentials"
-      }
-    };
+      navigate('/');
+    } catch (e) {
+      console.error("invalid credentials");
+    }
 
 
 
-    
-    return (
+  };
+return (
     <div className="flex min-h-screen">
-        <div className="w-1/2 bg-blue-600 flex flex-col justify-center items-center p-10 text-white">
-          <div className="max-w-md text-center">
-            {/* Add an eCommerce-related image */}
-            <img 
-              src="https://via.placeholder.com/400x300?text=Ecommerce+Store" 
-              alt="Ecommerce Store" 
-              className="mb-6 rounded-lg shadow-lg"
-            />
-            {/* Store name and tagline */}
-            <h2 className="text-3xl font-bold mb-4">ShopSmart</h2>
-            <p className="text-lg mb-6">
-              Your one-stop destination for all your shopping needs. Find great deals and exclusive products.
-            </p>
+      <div className="hidden lg:block w-3/5 bg-cover bg-center" style={{backgroundImage: "url('https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')"}}>
+        <div className="w-full h-full bg-black bg-opacity-50 flex flex-col justify-center items-center p-10 text-white">
+          <h2 className="text-5xl font-bold mb-6">ShopSmart</h2>
+          <p className="text-2xl mb-8 max-w-lg text-center">
+            Your one-stop destination for all your shopping needs. Find great deals and exclusive products.
+          </p>
+        </div>
+      </div>
+
+      <div className="w-full lg:w-2/5 0 flex">
+        <div className="w-full h-full flex flex-col p-8">
+          <div className="flex pt-20 flex-col justify-center items-center text-center space-y-4 mb-8">
+            <h3 className="text-3xl font-bold">Sign in</h3>
+            <p className="text-gray-600">Enter your email below to login to your account</p>
+          </div>
+          <div className="flex flex-col justify-center flex-grow">
+            <form onSubmit={updateData} className="space-y-4">
+              <div className="space-y-2">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+                <input
+                  id="email"
+                  type="email"
+                  placeholder="name@example.com"
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                />
+              </div>
+              <div className="space-y-2">
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+                <input
+                  id="password"
+                  type="password"
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                />
+              </div>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  id="terms"
+                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                />
+                <label
+                  htmlFor="terms"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  I agree to the terms and conditions
+                </label>
+              </div>
+              <button
+                type="submit"
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                Sign In
+              </button>
+            </form>
+            <div className="mt-4 text-center text-sm">
+              Don't have an account?{" "}
+              <span 
+                onClick={() => navigate('/signup')} 
+                className="font-medium text-indigo-600 hover:text-indigo-500 cursor-pointer"
+              >
+                Sign Up
+              </span>
+            </div>
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
 
-
-
-      <div className="flex-1 p-20 ml-20 justify-around">
-      <Card color="transparent" shadow={false}>
-        <Typography variant="h4" color="blue-gray">
-          Sign In
-        </Typography>
-        <Typography color="gray" className="mt-1 font-normal">
-          Nice to meet you! Enter your login details.
-        </Typography>
-        <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
-          <div className="mb-1 flex flex-col gap-6">
-            <Typography variant="h6" color="blue-gray" className="-mb-3">
-              Your Email
-            </Typography>
-            <Input
-              size="lg"
-              placeholder="name@mail.com"
-              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-              onChange={(e)=>setEmail(e.target.value)}
-              labelProps={{
-                className: "before:content-none after:content-none",
-              }}
-            />
-            <Typography variant="h6" color="blue-gray" className="-mb-3">
-              Password
-            </Typography>
-            <Input
-              type="password"
-              size="lg"
-              placeholder="********"
-              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-              onChange={(e)=>setPassword(e.target.value)}
-              labelProps={{
-                className: "before:content-none after:content-none",
-              }}
-            />
-          </div>
-          <Checkbox
-            label={
-              <Typography
-                variant="small"
-                color="gray"
-                className="flex items-center font-normal"
-              >
-                I agree the
-                <a
-                  href="#"
-                  className="font-medium transition-colors hover:text-gray-900"
-                >
-                  &nbsp;Terms and Conditions
-                </a>
-              </Typography>
-            }
-            containerProps={{ className: "-ml-2.5" }}
-          />
-          <Button onClick={() => {updateData()
-          }} className="mt-6" fullWidth>
-            sign In
-          </Button>
-          <Typography color="gray" className="mt-4 text-center font-normal">
-            Don't have an account?{" "}
-            <span 
-              onClick={()=>   navigate('/signup')} 
-              className="font-medium text-gray-900 cursor-pointer"
-            >
-              Sign Up
-            </span>
-          </Typography>
-        </form>
-      </Card>
-      </div> 
-  </div>
-    );
-  }
-  

@@ -7,8 +7,9 @@ import { setProducts} from "../features/productsSlice";
 import { useSelector } from "react-redux";
 
 
-export default function Products() {
 
+export default function Products() {
+ 
   const url = "http://localhost:3000/api/products/";
 
     const { isLoading, isError, data, error } = useFetchData(url,setProducts);

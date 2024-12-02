@@ -6,7 +6,9 @@ import FeaturedProducts from "../components/products.jsx"
 import BusinessInfo from "../components/Info.jsx";
 
 
+
 export default function Home(){
+
     return(
         <div >
             <AppBar />

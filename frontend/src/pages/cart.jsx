@@ -3,7 +3,7 @@ import CartPage from "../components/cartComponent";
 import BusinessInfo from "../components/Info";
 
 export default function Cart(){
-
+ 
     return(
         <div>
             <AppBar />
