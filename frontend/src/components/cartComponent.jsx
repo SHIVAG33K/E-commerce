@@ -1,74 +1,78 @@
 import React, { useState, useEffect } from 'react';
-import axios from "axios";
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useFetchData } from './hooks';
-import { useDispatch, useSelector } from 'react-redux';  
-import {addItems, removeItems, clearCart } from '../features/cartSlice.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { addItems, removeItems, clearCart } from '../features/cartSlice.js';
+import { useQuery } from '@tanstack/react-query';
+
 
 const CartPage = () => {
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { items, totalAmount } = useSelector(state => state.cart);
-  
-  const url = "http://localhost:3000/api/cart";
-  
+
+  const url = 'http://localhost:3000/api/cart';
   const shouldFetch = items.length === 0;
 
-  const { isLoading, isError, data,error } = useFetchData(url,addItems,shouldFetch);
-  
-  
-  const cartItems = items || [];
-  
-  const removeProduct = async (id) => {
-
-      
-      try {
-       const data = await axios.delete(`http://localhost:3000/api/cart/${id}`, { withCredentials: true });
-       if(data){
-        dispatch(removeItems(id));
-       }
-      } catch (e) {
-        console.log(e);
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(url, {
+        withCredentials: true
+      });
+      if (response.data) {
+        dispatch(addItems(response.data));
       }
-    };
-    
-
+      return response.data;
+    } catch (e) {
+      console.error(e);
+      return null; 
+    }
+  };
   
-
- 
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: [url], 
+    queryFn: fetchData, 
+    enabled: shouldFetch,
+  });
   
-  const fixed = {
-    size: 'Large',
-    inStock: true,
-    estimatedShipping: 'Ships in 3–4 weeks',
+  // const { isLoading, isError, data, error } = useFetchData(url, addItems, shouldFetch);
+
+  const cartItems = items || [];
+
+  const removeProduct = async (id) => {
+    try {
+      const data = await axios.delete(`http://localhost:3000/api/cart/${id}`, { withCredentials: true });
+      if (data) {
+        dispatch(removeItems(id));  
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
-  // const removeItem = (id) => {
-  //   setCartItems(cartItems.filter(item => item.id !== id));
-  // };
+  const allProducts = cartItems.map(item => item.id);  
 
-  const allProducts = []
-  cartItems.map(item => allProducts.push(item.product.id));
-
-
-
-
-  const sendOrder = async()=>{
-    const data = await axios.post("http://localhost:3000/api/orders/",{
-      product_id : allProducts 
-    },{
-      withCredentials: true,
-    })
-    navigate("/orders")
-  }
+  const sendOrder = async () => {
+    try {
+      const data = await axios.post('http://localhost:3000/api/orders/', {
+        product_id: allProducts,
+      }, {
+        withCredentials: true,
+      });
+      navigate('/orders');
+    } catch (e) {
+      console.error('Error sending order:', e);
+    }
+  };
 
   const handleQuantityChange = (id, quantity) => {
-    setCartItems(cartItems.map(item => item.id === id ? { ...item, quantity } : item));
+    dispatch(removeItems(id));  
+    dispatch(addItems([{ product: { ...cartItems.find(item => item.id === id), quantity } }])); 
   };
 
-  const subtotal = cartItems.reduce((total, item) => total + item.product.price * item.quantity, 0);
+  const subtotal = cartItems.reduce((total, item) => total + item.price * (item.quantity || 1), 0);
   const shippingEstimate = 5.00;
   const taxEstimate = subtotal * 0.08;
   const orderTotal = subtotal + shippingEstimate + taxEstimate;
@@ -89,25 +93,25 @@ const CartPage = () => {
                   <li key={item.id} className="flex py-6">
                     <div className="flex-shrink-0">
                       <img
-                        alt={`Front of men's ${item.product.name} in ${item.product.color}`}
-                        src={item.product.image}
+                        alt={`Front of men's ${item.name} in ${item.color}`}
+                        src={item.image}
                         className="h-24 w-24 object-cover"
                       />
                     </div>
                     <div className="ml-4 flex-1 flex flex-col">
                       <div className="flex justify-between items-start">
-                        <h3 className="text-lg font-medium text-gray-900">{item.product.name}</h3>
-                        <p className="ml-4 text-lg font-medium text-gray-900">${item.product.price}</p>
+                        <h3 className="text-lg font-medium text-gray-900">{item.name}</h3>
+                        <p className="ml-4 text-lg font-medium text-gray-900">${item.price}</p>
                       </div>
                       <div className="flex items-center mt-2">
-                        <p className="text-sm text-gray-500">Color: {item.product.color}</p>
-                        <p className="ml-4 text-sm text-gray-500">Size: {fixed.size}</p>
+                        <p className="text-sm text-gray-500">Color: {item.color}</p>
+                        <p className="ml-4 text-sm text-gray-500">Size: Large</p>
                       </div>
                       <div className="flex items-center mt-4">
                         <label htmlFor={`quantity-${item.id}`} className="text-sm text-gray-700">Quantity:</label>
                         <select
                           id={`quantity-${item.id}`}
-                          value={item.quantity}
+                          value={item?.quantity}
                           onChange={(e) => handleQuantityChange(item.id, parseInt(e.target.value))}
                           className="ml-2 border border-gray-300 rounded-md p-1"
                         >
@@ -117,22 +121,11 @@ const CartPage = () => {
                         </select>
                         <button
                           type="button"
-                          onClick={() => {
-                            removeProduct(item.id);
-                          }
-                          }
+                          onClick={() => removeProduct(item.id)}
                           className="ml-4 text-sm text-red-600 hover:text-red-800"
                         >
                           Remove
                         </button>
-                      </div>
-                      <div className="mt-2 text-sm text-gray-500">
-                        {fixed.inStock ? (
-                          <p>In stock</p>
-                        ) : (
-                          <p className="text-gray-400">Out of stock</p>
-                        )}
-                        <p>{fixed.estimatedShipping}</p>
                       </div>
                     </div>
                   </li>

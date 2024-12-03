@@ -24,6 +24,7 @@ export function useFetchData(url,fn, shouldFetch) {
   });
   useEffect(() => {
     if (shouldFetch && data) {
+      console.log("added");
       dispatch(fn(data));
     }
   }, [data, dispatch, fn, shouldFetch]);

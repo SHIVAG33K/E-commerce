@@ -1,13 +1,16 @@
 import { useState } from 'react';
 import { Search, User, MenuIcon, ShoppingCart, X, CreditCard, LogOut } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 const AppBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const items = useSelector(state => state.cart.items.length);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   
-  // Hover handlers for user menu
   const handleMouseEnter = () => setIsUserMenuOpen(true);
   const handleMouseLeave = () => setIsUserMenuOpen(false);
 
@@ -35,9 +38,9 @@ const AppBar = () => {
 
           {/* Logo */}
           <div className="flex lg:flex-1">
-            <a href="#" className="flex items-center">
+            <a className="flex items-center">
               <span className="sr-only">Your Company</span>
-              <span className="text-lg font-bold text-gray-900">store</span>
+              <span className="text-lg pr-0 font-bold text-gray-900" onClick={() => navigate("/")}>Store</span>
             </a>
           </div>
 
@@ -49,9 +52,9 @@ const AppBar = () => {
             <a href="#" className="text-sm font-medium text-gray-700 hover:text-gray-800">
               Men
             </a>
-            <a href="#" className="text-sm font-medium text-gray-700 hover:text-gray-800">
+            <span onClick={() => navigate("/orders")} className="text-sm font-medium text-gray-700 hover:text-gray-800">
               Orders
-            </a>
+            </span>
             <a href="#" className="text-sm font-medium text-gray-700 hover:text-gray-800">
               <span className="sr-only">Search</span>
               <Search className="h-5 w-5" aria-hidden="true" />
@@ -124,11 +127,11 @@ const AppBar = () => {
               )}
             </div>
             <div className="ml-4 flow-root lg:ml-8">
-              <a href="#" className="group -m-2 flex items-center p-2">
+              <span onClick={() => navigate("/cart")} className="group -m-2 flex items-center p-2">
                 <ShoppingCart className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
-                <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
+                <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">{items}</span>
                 <span className="sr-only">items in cart, view bag</span>
-              </a>
+              </span>
             </div>
           </div>
         </div>
@@ -147,9 +150,9 @@ const AppBar = () => {
           <a href="#" className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900">
             Men
           </a>
-          <a href="#" className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900">
+          <span onClick={() => navigate("/orders")} className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900">
             Orders
-          </a>
+          </span>
         </div>
       </div>
     </div>

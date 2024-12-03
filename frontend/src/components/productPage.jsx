@@ -6,8 +6,8 @@ import { Radio, RadioGroup } from '@headlessui/react'
 import { useParams } from 'react-router-dom'
 import axios from "axios";
 import { useDispatch, useSelector } from 'react-redux';  
-import { productSlice } from '../features/productsSlice';
-import { useFetchData } from './hooks';
+import {addItems, removeItems, clearCart } from '../features/cartSlice.js';
+
 
 const product = {
 
@@ -56,6 +56,7 @@ export default function Example() {
 
   const {id} = useParams();
   const url = `http://localhost:3000/api/products/${id}`;
+  const dispatch = useDispatch();
 
   const products = useSelector(state => state.products.products);
 
@@ -78,7 +79,22 @@ export default function Example() {
     }
   },[products])
 
-  
+  const addCart = async() => {
+    try{
+      const query = await axios.post("http://localhost:3000/api/cart/",{
+        product_id: Number(id) , quantity : 1
+      },{
+        withCredentials: true
+      })
+      navigate("/cart")
+      console.log(query);
+      console.log(items);
+      dispatch(addItems(items));
+    }catch(e){
+      console.log(e);
+    }
+
+  }
   
 
 
@@ -222,15 +238,7 @@ export default function Example() {
               <button
                 type="submit"
                 className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                onClick={async() => {
-                  const query = await axios.post("http://localhost:3000/api/cart/",{
-                    product_id: Number(id) , quantity : 1
-                  },{
-                    withCredentials: true
-                  })
-                  navigate("/cart")
-                  console.log("done")
-                }}>
+                onClick={addCart}>
                 Add to Cart
               </button>
               <button

@@ -1,45 +1,36 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    items:  [],
+    items: [],
     totalAmount: 0,
-}
+};
 
 export const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    addItems: (state,action) => {
-      const newItem = action.payload;
-      
-      if(newItem && newItem.length > 0){
-        newItem.map(item => {
-          state.items.push(item);  
-          // state.totalAmount += item.price; 
-        });
+    addItems: (state, action) => {
+      const newItems = Array.isArray(action.payload) ? action.payload : [action.payload];
+      newItems.forEach(({ product }) => {
+        state.items.push(product);  
+        state.totalAmount += product.price * (product.quantity || 1);  
+      });
+    },
+    removeItems: (state, action) => {
+      const productId = action.payload;
+      const product = state.items.find(item => item.id === productId);
+      if (product) {
+        state.items = state.items.filter(item => item.id !== productId); 
+        state.totalAmount -= product.price * (product.quantity || 1); 
       }
-      
-      
-      // state.totalAmount += newItem.price;
     },
-    removeItems: (state,action) => {
-        const product = action.payload;
-      
-        const exist = state.items.find(item => item.id == product);
-      
-        if (exist){
-          state.items = state.items.filter(item => item.id != product );
-           
-            // state.totalAmount -= exist.price
-        }
+    clearCart: (state) => {
+      state.items = [];
+      state.totalAmount = 0;  
     },
-    clearCart: state => {
-        state.items = [];
-        state.totalAmount = 0;
-      },
   },
-})
+});
 
-export const { addItems, removeItems, clearCart} = cartSlice.actions
+export const { addItems, removeItems, clearCart } = cartSlice.actions;
 
-export default cartSlice.reducer
+export default cartSlice.reducer;

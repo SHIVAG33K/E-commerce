@@ -14,7 +14,13 @@ const OrderPage = () => {
   useEffect(() => {
     fetchData();
   },[]) 
-  console.log(data);
+  const today = new Date();
+  const month = today.getMonth() + 1;
+  const day = today.getDate();
+  const year = today.getFullYear();
+  
+  const formattedDate = `${month}/${day}/${year}`|| "12/02/2024";
+  
   return (
     <div className="px-6 py-8 sm:px-24 bg-gray-100 min-h-screen">
       <div className="space-y-8 max-w-4xl mx-auto">
@@ -32,7 +38,7 @@ const OrderPage = () => {
 
                 <OrderItem 
                   orderNumber="AT48441546" 
-                  datePlaced="Dec 28, 2024" 
+                  datePlaced={formattedDate}
                   totalAmount="$40.00"x
                   items={data.data}
                 />  )}
@@ -71,7 +77,7 @@ const OrderItem = ({ orderNumber, datePlaced, totalAmount, items }) => (
       <h3 className="text-lg font-semibold text-gray-700">
         Order placed on <time>{datePlaced}</time>
       </h3>
-      <span className="text-sm text-gray-500">{totalAmount}</span>
+    
     </div>
     <dl className="grid grid-cols-3 gap-4 text-sm text-gray-500">
       <div>
@@ -81,10 +87,6 @@ const OrderItem = ({ orderNumber, datePlaced, totalAmount, items }) => (
       <div>
         <dt className="font-medium text-gray-700">Date placed</dt>
         <dd>{datePlaced}</dd>
-      </div>
-      <div>
-        <dt className="font-medium text-gray-700">Total amount</dt>
-        <dd>{totalAmount}</dd>
       </div>
     </dl>
 
