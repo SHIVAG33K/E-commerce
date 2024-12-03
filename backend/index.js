@@ -10,8 +10,8 @@ app.use(cookieParser());
 app.use(cors({
     origin: 'http://localhost:5173',  // The frontend URL (change this for production)
     methods: ['GET', 'POST', 'PUT', 'DELETE'],  // Allow these HTTP methods
-    credentials: true,  // Allow sending cookies with requests
-    optionsSuccessStatus: 200, // Some legacy browsers choke on 204
+    credentials: true,  // Allow sending cookies with request
+    optionsSuccessStatus: 200, // Some legacy browsers choke on 20
 }));
   
 app.use(express.json());
