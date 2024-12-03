@@ -12,8 +12,8 @@ const CartPage = () => {
   const dispatch = useDispatch();
 
   const { items, totalAmount } = useSelector(state => state.cart);
-
-  const url = 'http://localhost:3000/api/cart';
+  const url = 'https://backend-production-06f4.up.railway.app/api/cart';
+  // const url = 'http://localhost:3000/api/cart';
   const shouldFetch = items.length === 0;
 
   const fetchData = async () => {
@@ -69,7 +69,7 @@ const CartPage = () => {
 
   const removeProduct = async (id) => {
     try {
-      const data = await axios.delete(`http://localhost:3000/api/cart/${id}`, { withCredentials: true });
+      const data = await axios.delete(`https://backend-production-06f4.up.railway.app/api/cart/${id}`, { withCredentials: true });
       if (data) {
         dispatch(removeItems(id));  
       }
@@ -82,7 +82,7 @@ const CartPage = () => {
 
   const sendOrder = async () => {
     try {
-      const data = await axios.post('http://localhost:3000/api/orders/', {
+      const data = await axios.post('https://backend-production-06f4.up.railway.app/api/orders/', {
         product_id: allProducts,
       }, {
         withCredentials: true,

@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 const OrderPage = () => {
   const [data, setData] = useState([])
   const dispatch = useDispatch();
-  const url = "http://localhost:3000/api/orders/"
+  const url = "https://backend-production-06f4.up.railway.app/api/orders/"
 
   // const fetchData = async() => {
   //   const data = await axios.get("http://localhost:3000/api/orders/",{

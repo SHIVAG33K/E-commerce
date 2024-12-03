@@ -11,7 +11,7 @@ const ProtectedRoute = ({ children }) => {
   if (!isAuthenticated && token) {
     const data = async()=>{
       try{
-        const response = await axios.post("http://localhost:3000/api/auth/check");
+        const response = await axios.post("https://backend-production-06f4.up.railway.app/api/auth/check");
         return children;
       }catch(e){
         return <Navigate to="/signin" />;

@@ -16,8 +16,9 @@ export function SignupForm() {
 
   const updateData = async (event) => {
     event.preventDefault(); // Prevent form from reloading the page
+    const url = "https://backend-production-06f4.up.railway.app/api/auth/signup";
     try {
-      const response = await axios.post("http://localhost:3000/api/auth/signup", {
+      const response = await axios.post(url, {
         email,
         name,
         password,

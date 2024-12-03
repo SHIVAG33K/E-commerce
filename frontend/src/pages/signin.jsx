@@ -12,11 +12,14 @@ export function SigninForm() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+// const url = "http://localhost:3000/api/auth/signin"
+const url = "https://backend-production-06f4.up.railway.app/api/auth/signin"
+
 
   const updateData = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3000/api/auth/signin", {
+      const response = await axios.post(url, {
         email,
         password
       }, {
