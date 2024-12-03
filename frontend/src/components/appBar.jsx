@@ -1,18 +1,53 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Search, User, MenuIcon, ShoppingCart, X, CreditCard, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import Cookies from 'js-cookie';
+import { logout } from '../features/userSlice';
 
 const AppBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const items = useSelector(state => state.cart.items.length);
+  
+  
+  const userMenuRef = useRef(null);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   
-  const handleMouseEnter = () => setIsUserMenuOpen(true);
-  const handleMouseLeave = () => setIsUserMenuOpen(false);
+  const toggleUserMenu = () => setIsUserMenuOpen(prev => !prev);
+
+  // Close user menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+        setIsUserMenuOpen(false);
+      }
+    };
+
+    if (isUserMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    // Cleanup the event listener on unmount
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isUserMenuOpen]);
+
+  const userLogout = ()=>{
+    Cookies.remove('token');
+    dispatch(logout);
+    navigate('/signin');
+
+  }
+
+
 
   return (
     <div className="bg-gray-100">
@@ -65,11 +100,11 @@ const AppBar = () => {
           <div className="flex items-center">
             <div 
               className="relative" 
-              onMouseEnter={handleMouseEnter} 
-              onMouseLeave={handleMouseLeave} 
+              ref={userMenuRef}
             >
               <button
                 className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800 focus:outline-none"
+                onClick={toggleUserMenu}
                 aria-expanded={isUserMenuOpen}
                 aria-haspopup="true"
               >
@@ -117,7 +152,8 @@ const AppBar = () => {
                     tabIndex={-1}
                     onClick={() => {
                       setIsUserMenuOpen(false);
-                      console.log("Logout clicked");
+                      console.log("Logout clicked")
+                      userLogout();
                     }}
                   >
                     <LogOut className="mr-3 h-5 w-5" aria-hidden="true" />

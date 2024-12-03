@@ -86,10 +86,16 @@ export default function Example() {
       },{
         withCredentials: true
       })
-      navigate("/cart")
+      const Item = {
+        product: items,
+        quantity: 1
+      };
+      
       console.log(query);
       console.log(items);
-      dispatch(addItems(items));
+
+      dispatch(addItems(Item));
+      navigate("/cart");
     }catch(e){
       console.log(e);
     }
