@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 
 export default function Products() {
  
-  const url = "https://backend-production-06f4.up.railway.app/api/products/";
+  const url = "https://ecom-backend-production-a959.up.railway.app/api/products/";
   // const url = "http://localhost:3000/api/products/"
 
     const { isLoading, isError, data, error } = useFetchData(url,setProducts);

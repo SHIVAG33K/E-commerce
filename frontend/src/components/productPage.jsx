@@ -55,7 +55,8 @@ export default function Example() {
  
 
   const {id} = useParams();
-  const url = `https://backend-production-c71a9.up.railway.app/api/products/${id}`;
+  const url = `https://ecom-backend-production-a959.up.railway.app/api/products/${id}`;
+  // const url = `http://localhost:3000/api/products/${id}` 
   const dispatch = useDispatch();
 
   const products = useSelector(state => state.products.products);
@@ -81,7 +82,7 @@ export default function Example() {
 
   const addCart = async() => {
     try{
-      const query = await axios.post("https://backend-production-06f4.up.railway.app/api/cart/",{
+      const query = await axios.post("https://ecom-backend-production-a959.up.railway.app/api/cart/",{
         product_id: Number(id) , quantity : 1
       },{
         withCredentials: true

@@ -8,9 +8,9 @@ const app = express();
 
 app.use(cookieParser());
 app.use(cors({
-    origin: 'http://localhost:5173',  // The frontend URL (change this for production)
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],  // Allow these HTTP methods
-    credentials: true,  // Allow sending cookies with requests
+    origin: 'http://localhost:5173',  
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],  
+    credentials: true, 
   }));
   
 app.use(express.json());
