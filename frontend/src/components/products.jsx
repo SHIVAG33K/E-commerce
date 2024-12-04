@@ -14,21 +14,21 @@ const products =  [
       name: 'Zara Stretch Shirt',
       category: 'Shirts',
       price: '$550.00',
-      imageUrl: 'https://tailwindui.com/plus/img/ecommerce-images/product-page-01-related-product-02.jpg',
+      imageSrc: 'https://tailwindui.com/plus/img/ecommerce-images/product-page-01-related-product-02.jpg',
     },
     {
       id: 3,
       name: 'Zara Checked Flannel Shirt',
       category: 'Shirts',
       price: '$450.00',
-      imageUrl: 'https://tailwindui.com/plus/img/ecommerce-images/product-page-01-related-product-03.jpg',
+      imageSrc: 'https://tailwindui.com/plus/img/ecommerce-images/product-page-01-related-product-03.jpg',
     },
     {
       id: 4,
       name: 'Men Self-Design Regular Fit Shirt',
       category: 'Shirts',
       price: '$540.00',
-      imageUrl: 'https://tailwindui.com/plus/img/ecommerce-images/product-page-01-related-product-04.jpg',
+      imageSrc: 'https://tailwindui.com/plus/img/ecommerce-images/product-page-01-related-product-04.jpg',
     },
   ];
   
