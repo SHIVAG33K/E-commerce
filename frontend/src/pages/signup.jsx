@@ -15,8 +15,8 @@ export function SignupForm() {
   const dispatch = useDispatch();
 
   const updateData = async (event) => {
-    event.preventDefault(); // Prevent form from reloading the page
-    const url = "http://lecom-backend-production-a959.up.railway.app/api/auth/signup";
+    event.preventDefault(); 
+    const url = "https://ecom-backend-production-a959.up.railway.app/api/auth/signup";
     try {
       const response = await axios.post(url, {
         email,
@@ -27,7 +27,7 @@ export function SignupForm() {
         withCredentials: true
       });
       if( response.data.token){
-        cookies.set("token", response.data.token);
+        // cookies.set("token", response.data.token);
         const decoded = jwtDecode(response.data.token);
         dispatch(user(decoded));
         navigate('/');

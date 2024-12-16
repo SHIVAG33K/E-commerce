@@ -16,6 +16,7 @@ router.get("/",async(req,res)=>{
 router.get("/:id", async(req,res) => {
 
     const id = req.params.id
+    console.log(id);
     const item = await prisma.products.findFirst({
         where:{
             id : Number(id)

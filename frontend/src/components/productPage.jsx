@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom'
 import axios from "axios";
 import { useDispatch, useSelector } from 'react-redux';  
 import {addItems, removeItems, clearCart } from '../features/cartSlice.js';
+import { createOrders } from '../features/orderSlice';
 
 
 const product = {
@@ -102,6 +103,19 @@ export default function Example() {
     }
 
   }
+
+  const addOrder = async () => {
+    try {
+      const data = await axios.post('https://ecom-backend-production-a959.up.railway.app/api/orders/', {
+        product_id:  [Number(id)] ,
+      }, {
+        withCredentials: true,
+      });
+      navigate('/orders');
+    } catch (e) {
+      console.error('Error sending order:', e);
+    }
+  };
   
 
 
@@ -252,7 +266,7 @@ export default function Example() {
                 type="submit"
                 className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 onClick={() => {
-                  navigate("/")
+                  addOrder();
                 }}>
                 buy
               </button>

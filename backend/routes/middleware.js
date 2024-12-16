@@ -10,23 +10,28 @@ const prisma = new PrismaClient();
 
 
 export const authMiddleware = async (req, res, next) => {
-
   const token = req.cookies['token'];
 
-    if (!token)
-      return res.status(401).json({
-        success: false,
-        message: "Unauthorised user!",
-      });
-  
-    try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = decoded;
-      next();
-    } catch (error) {
-      res.status(401).json({
-        success: false,
-        message: "Unauthorised user!",
-      });
-    }
-  };
+  if (!token) {
+    return res.status(401).json({
+      success: false,
+      message: "Unauthorised user!",
+    });
+  }
+
+  try {
+    console.log("Token:", token);
+    console.log("JWT_SECRET:", process.env.JWT_SECRET);
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("Decoded:", decoded);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    console.error("Error decoding token:", error.message);
+    res.status(401).json({
+      success: false,
+      message: "Unauthorised user!",
+    });
+  }
+};
