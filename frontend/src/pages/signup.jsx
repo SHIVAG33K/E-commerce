@@ -52,7 +52,6 @@ export function SignupForm() {
           </p>
         </div>
       </div>
-
       {/* Right section with sign-in form */}
       <div className="w-full lg:w-2/5 flex">
         <div className="w-full h-full flex flex-col p-8">

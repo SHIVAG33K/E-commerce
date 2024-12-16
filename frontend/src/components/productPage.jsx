@@ -200,7 +200,6 @@ export default function Example() {
                   </RadioGroup>
                 </fieldset>
               </div>
-
               {/* Size Selector */}
               <div className="mt-10">
                 <div className="flex items-center justify-between">
